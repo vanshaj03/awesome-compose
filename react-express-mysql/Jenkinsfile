@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git url: 'git@github.com:vanshaj03/awesome-compose.git'
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                dir('react-express-mysql') {
+                    sh 'docker-compose down || true'
+                    sh 'docker-compose up -d --build'
+                }
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                sh 'docker ps'
+            }
+        }
+    }
+}
